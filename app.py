@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.responses import JSONResponse
 import fastapi.security as OAuth2PasswordRequestForm
@@ -37,10 +38,14 @@ async def login_user(
   
     return await _services.create_token(db_user)
 
-@app.get("/api/users/current-user",response_model=_schemas.UserResponse)
+@app.get("/api/v1/users/current-user",response_model=_schemas.UserResponse)
 async def current_user(user: _schemas.UserResponse = Depends(_services.current_user)):
     return user 
 
 @app.post("/api/v1/posts", response_model = _schemas.PostResponse)
 async def create_post(post_request: _schemas.PostRequest, user: _schemas.UserRequest = Depends(_services.current_user), db: Session = Depends(_database.get_db)):
     return await _services.create_post(user = user, db = db, post= post_request)
+
+@app.get("/api/v1/posts/users", response_model=List[_schemas.PostResponse])
+async def get_posts_by_user(user: _schemas.UserRequest = Depends(_services.current_user),  db: Session = Depends(_database.get_db)):
+    return await _services.get_posts_by_user(user=user, db=db)

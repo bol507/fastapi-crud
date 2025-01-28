@@ -80,3 +80,7 @@ async def create_post(user: _schemas.UserResponse, db: Session, post: _schemas.P
     db.refresh(post)
     #return DTO
     return _schemas.PostResponse.model_validate(post)
+
+async def get_posts_by_user(user: _schemas.UserResponse, db: Session):
+    posts = db.query(_models.PostModel).filter_by(user_id=user.id)
+    return list(map(_schemas.PostResponse, posts))
