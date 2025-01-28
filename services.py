@@ -95,6 +95,13 @@ async def get_post_detail(post_id: int, db: Session):
         raise HTTPException(status_code=404, detail="Post not found")
     return db_post
 
+async def get_user_detail(user_id: int, db: Session):
+    db_user = db.query(_models.UserModel).filter(_models.UserModel.id == user_id).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
+
+
 async def delete_post(post: _models.PostModel, db: Session):
     db.delete(post)
     db.commit()

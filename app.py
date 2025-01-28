@@ -55,10 +55,13 @@ async def get_posts_by_all(db: Session = Depends(_database.get_db)):
     return await _services.get_posts_by_all(db=db)
 
 
-
 @app.get("api/v1/posts/{post_id}/", response_model=_schemas.PostResponse)
 async def get_post_detail(post_id: int, db: Session= Depends(_database.get_db)):
     return await _services.get_post_detail(post_id=post_id, db=db)
+
+@app.get("api/v1/users/{user_id}/", response_model=_schemas.UserResponse)
+async def get_user_detail(user_id: int, db: Session= Depends(_database.get_db)):
+    return await _services.get_user_detail(user_id=user_id, db=db)
 
 @app.delete("api/v1/posts/{post_id}")
 async def delete_post(post_id= int, db: Session = Depends(_database.get_db), user: _schemas.UserRequest = Depends(_services.current_user)):
