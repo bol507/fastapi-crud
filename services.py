@@ -85,6 +85,10 @@ async def get_posts_by_user(user: _schemas.UserResponse, db: Session):
     posts = db.query(_models.PostModel).filter_by(user_id=user.id)
     return list(map(_schemas.PostResponse.model_validate(posts), posts))
 
+async def get_posts_by_all(db: Session):
+    posts = db.query(_models.PostModel)
+    return list(map(_schemas.PostResponse.model_validate(posts), posts))
+
 async def get_post_detail(post_id: int, db: Session):
     db_post = db.query(_models.PostModel).filter(_models.PostModel.id == post_id).first()
     if db_post is None:
