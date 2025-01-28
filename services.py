@@ -83,4 +83,10 @@ async def create_post(user: _schemas.UserResponse, db: Session, post: _schemas.P
 
 async def get_posts_by_user(user: _schemas.UserResponse, db: Session):
     posts = db.query(_models.PostModel).filter_by(user_id=user.id)
-    return list(map(_schemas.PostResponse, posts))
+    return list(map(_schemas.PostResponse.model_validate(posts), posts))
+
+async def get_post_detail(post_id: int, db: Session):
+    db_post = db.query(_models.PostModel).filter(_models.PostModel.id == post_id).first()
+    if db_post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return _schemas.PostResponse.model_validate(db_post)

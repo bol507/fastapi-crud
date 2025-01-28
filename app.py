@@ -49,3 +49,8 @@ async def create_post(post_request: _schemas.PostRequest, user: _schemas.UserReq
 @app.get("/api/v1/posts/users", response_model=List[_schemas.PostResponse])
 async def get_posts_by_user(user: _schemas.UserRequest = Depends(_services.current_user),  db: Session = Depends(_database.get_db)):
     return await _services.get_posts_by_user(user=user, db=db)
+
+@app.get("api/v1/posts/{post_id}/", response_model=_schemas.PostResponse)
+async def get_post_detail(post_id: int, db: Session= Depends(_database.get_db)):
+    return await _services.get_post_detail(post_id=post_id, db=db)
+    
