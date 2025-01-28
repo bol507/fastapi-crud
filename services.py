@@ -94,3 +94,13 @@ async def get_post_detail(post_id: int, db: Session):
 async def delete_post(post: _models.PostModel, db: Session):
     db.delete(post)
     db.commit()
+
+async def update_post(post_request: _schemas.PostRequest, post: _models.PostModel, db: Session):
+    post.title = post_request.title
+    post.description = post_request.description
+    post.image = post_request.image
+
+    db.commit()
+    db.refresh(post)
+
+    return _schemas.PostResponse.model_validate(post)

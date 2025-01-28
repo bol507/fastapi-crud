@@ -59,3 +59,8 @@ async def delete_post(post_id= int, db: Session = Depends(_database.get_db), use
     post = await _services.get_post_detail(post_id=post_id,db=db)
     await _services.delete_post(post=post , db=db)
     return "Post delete sucessful"
+
+@app.put("api/v1/posts/{post_id}", response_model=_schemas.PostResponse)
+async def update_post(post_id = int, post_request: _schemas.PostRequest, db: Session = Depends(_database.get_db)):
+    db_post = await _services.get_post_detail(post_id=post_id, db=db)
+    return await _services.update_post(post_request=post_request, post=db_post, db=db)

@@ -24,7 +24,7 @@ class PostBase(_pydantic.BaseModel):
     description: str
     user_id: int
   
-class postRequest(PostBase):
+class PostRequest(PostBase):
     pass
 
 class PostResponse(PostBase):
