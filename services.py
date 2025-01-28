@@ -89,4 +89,8 @@ async def get_post_detail(post_id: int, db: Session):
     db_post = db.query(_models.PostModel).filter(_models.PostModel.id == post_id).first()
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
-    return _schemas.PostResponse.model_validate(db_post)
+    return db_post
+
+async def delete_post(post: _models.PostModel, db: Session):
+    db.delete(post)
+    db.commit()
